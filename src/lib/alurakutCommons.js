@@ -63,7 +63,7 @@ export function AlurakutMenu({ githubUser }) {
 }
 AlurakutMenu.Wrapper = styled.header`
   width: 100%;
-  background-color: rgba(4,3,106,1);
+  background-color: rgba(4, 3, 106, 1);
   position: fixed;
   z-index: 150;
 
@@ -76,11 +76,12 @@ AlurakutMenu.Wrapper = styled.header`
     left: 0;
     right: 0;
     top: 48px;
-    transition: .3s;
-    pointer-events: ${({ isMenuOpen }) => isMenuOpen ? 'all' : 'none'};
-    opacity: ${({ isMenuOpen }) => isMenuOpen ? '1' : '0'};
-    transform: ${({ isMenuOpen }) => isMenuOpen ? 'translateY(0)' : 'translateY(calc(-100% - 48px))'};
-    @media(min-width: 860px) {
+    transition: 0.3s;
+    pointer-events: ${({ isMenuOpen }) => (isMenuOpen ? "all" : "none")};
+    opacity: ${({ isMenuOpen }) => (isMenuOpen ? "1" : "0")};
+    transform: ${({ isMenuOpen }) =>
+      isMenuOpen ? "translateY(0)" : "translateY(calc(-100% - 48px))"};
+    @media (min-width: 860px) {
       display: none;
     }
     > div {
@@ -92,7 +93,7 @@ AlurakutMenu.Wrapper = styled.header`
     }
     .boxLink {
       font-size: 18px;
-      color: #2E7BB4;
+      color: #2e7bb4;
       -webkit-text-decoration: none;
       text-decoration: none;
       font-weight: 800;
@@ -101,11 +102,11 @@ AlurakutMenu.Wrapper = styled.header`
       margin-top: 12px;
       margin-bottom: 8px;
       border-color: transparent;
-      border-bottom-color: #ECF2FA;
+      border-bottom-color: #ecf2fa;
     }
   }
   .container {
-    background-color: rgba(4,3,106,1);
+    background-color: rgb(48, 139, 197);
     padding: 7px 16px;
     max-width: 1110px;
     margin: auto;
@@ -113,7 +114,7 @@ AlurakutMenu.Wrapper = styled.header`
     justify-content: space-between;
     position: relative;
     z-index: 101;
-    @media(min-width: 860px) {
+    @media (min-width: 860px) {
       justify-content: flex-start;
     }
     button {
@@ -122,13 +123,13 @@ AlurakutMenu.Wrapper = styled.header`
       background: transparent;
       align-self: center;
       display: inline-block;
-      @media(min-width: 860px) {
+      @media (min-width: 860px) {
         display: none;
       }
     }
     nav {
       display: none;
-      @media(min-width: 860px) {
+      @media (min-width: 860px) {
         display: flex;
         padding-left: 5px;
       }
@@ -140,7 +141,7 @@ AlurakutMenu.Wrapper = styled.header`
         text-decoration: none;
         &:after {
           content: " ";
-          background-color: #5292C1;
+          background-color: #5292c1;
           display: block;
           position: absolute;
           width: 1px;
@@ -154,7 +155,7 @@ AlurakutMenu.Wrapper = styled.header`
     }
     input {
       color: #ffffff;
-      background: #5579A1;
+      background: #5579a1;
       padding: 10px 42px;
       border: 0;
       background-image: url(${`${BASE_URL}/icons/search.svg`});
@@ -166,7 +167,7 @@ AlurakutMenu.Wrapper = styled.header`
         color: #ffffff;
         opacity: 1;
       }
-    } 
+    }
   }
 `;
 AlurakutMenu.Logo = styled.img`
