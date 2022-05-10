@@ -159,12 +159,11 @@ export default function Home(props) {
       <IndexPage />
       <AlurakutMenu githubUser={githubUser} />
       <MainGrid>
-
-        <div className="profileArea" style={{ gridArea: 'profileArea' }}>
+        <div className="profileArea" style={{ gridArea: "profileArea" }}>
           <ProfileSidebar githubUser={githubUser} />
         </div>
 
-        <div className="welcomeArea" style={{ gridArea: 'welcomeArea' }}>
+        <div className="welcomeArea" style={{ gridArea: "welcomeArea" }}>
           <Box>
             <h1 className="title">Bem vindo(a), {githubUser}!</h1>
             <OrkutNostalgicIconSet />
@@ -172,33 +171,35 @@ export default function Home(props) {
 
           <Box>
             <h2 className="subTitle">Crie sua comunidade</h2>
-            <form onSubmit={function handleCriaComunidade(e) {
-              e.preventDefault();
-              const dadosDoForm = new FormData(e.target);
+            <form
+              onSubmit={function handleCriaComunidade(e) {
+                e.preventDefault();
+                const dadosDoForm = new FormData(e.target);
 
-              const comunidade = {
-                title: dadosDoForm.get('title'),
-                imageUrl: dadosDoForm.get('image'),
-                paginaUrl: dadosDoForm.get('url')
-              }
-              fetch('/api/comunidades', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(comunidade),
-              })
-                .then(async (response) => {
+                const comunidade = {
+                  title: dadosDoForm.get("title"),
+                  imageUrl: dadosDoForm.get("image"),
+                  creatorSlug: githubUser,
+                };
+                fetch("/api/comunidades", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(comunidade),
+                }).then(async (response) => {
                   const dados = await response.json();
                   // console.log(dados.registroCriado);
                   const comunidade = dados.registroCriado;
-                  const comunidadesAtualizadas = [...comunidades, comunidade]
+                  const comunidadesAtualizadas = [...comunidades, comunidade];
                   setComunidades(comunidadesAtualizadas);
-                  setcomunidadesTitle('');
-                  setComunidadesImage('');
-                  setComunidadesUrl('');
-                })
-            }}>
+                  console.log(comunidadesTitle);
+                  setComunidadesTitle("");
+                  setComunidadesImage("");
+                  setComunidadesUrl("");
+                });
+              }}
+            >
               <div>
                 <CustomizedInput
                   placeholder="Qual vai ser o nome da sua comunidade?"
@@ -208,7 +209,7 @@ export default function Home(props) {
                   onValueChange={setComunidadesTitle}
                 />
               </div>
-              <div style={{ display: 'flex' }}>
+              <div style={{ display: "flex" }}>
                 <CustomizedInput
                   placeholder="Coloque a URL da imagem da capa"
                   name="image"
@@ -216,15 +217,12 @@ export default function Home(props) {
                   value={comunidadesImage}
                   onValueChange={setComunidadesImage}
                 />
-                <CustomizedInput
-                  placeholder="Coloque a URL do site"
-                  name="url"
-                  aria-label="Coloque a URL do site"
-                  value={comunidadesUrl}
-                  onValueChange={setComunidadesUrl}
-                />
               </div>
-              <button type="submit" aria-label="Criar comunidade" style={{ background: '#2E7BB4' }} >
+              <button
+                type="submit"
+                aria-label="Criar comunidade"
+                style={{ background: "#2E7BB4" }}
+              >
                 Criar comunidade
               </button>
             </form>
@@ -232,31 +230,32 @@ export default function Home(props) {
 
           <Box>
             <h2 className="subTitle">Deixe seu comentario</h2>
-            <form onSubmit={function handleCriaPost(e) {
-              e.preventDefault();
-              const dadosDoForm = new FormData(e.target);
+            <form
+              onSubmit={function handleCriaPost(e) {
+                e.preventDefault();
+                const dadosDoForm = new FormData(e.target);
 
-              const post = {
-                name: dadosDoForm.get('name'),
-                text: dadosDoForm.get('text'),
-              }
-              fetch('/api/post', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(post),
-              })
-                .then(async (response) => {
+                const post = {
+                  name: dadosDoForm.get("name"),
+                  text: dadosDoForm.get("text"),
+                };
+                fetch("/api/post", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(post),
+                }).then(async (response) => {
                   const dadosPost = await response.json();
                   // console.log(dados.registroCriado);
                   const post = dadosPost.registroCriado;
-                  const postAtualizados = [post, ...posts]
+                  const postAtualizados = [post, ...posts];
                   setPosts(postAtualizados);
-                  setNameValue('');
-                  setTextValue('');
-                })
-            }}>
+                  setNameValue("");
+                  setTextValue("");
+                });
+              }}
+            >
               <div>
                 <CustomizedInput
                   placeholder="Usuário Github"
@@ -284,7 +283,11 @@ export default function Home(props) {
                   onChange={e => setNameValue(e.target.value)}
                   required
                 /> */}
-              <button type="submit" aria-label="Criar comentario" style={{ background: '#2E7BB4' }} >
+              <button
+                type="submit"
+                aria-label="Criar comentario"
+                style={{ background: "#2E7BB4" }}
+              >
                 Criar comentario
               </button>
             </form>
@@ -297,10 +300,18 @@ export default function Home(props) {
               {posts.map((itemAtual) => {
                 return (
                   <li key={itemAtual.id}>
-                    <a href={`https://github.com/${itemAtual.name}`} target="_blank" rel="noopener noreferrer" title="Site do usuário">
-                      <img src={`https://github.com/${itemAtual.name}.png`} alt="Foto usuário" />
+                    <a
+                      href={`https://github.com/${itemAtual.name}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="Site do usuário"
+                    >
+                      <img
+                        src={`https://github.com/${itemAtual.name}.png`}
+                        alt="Foto usuário"
+                      />
                     </a>
-                    <div style={{ flexGrow: '2' }}>
+                    <div style={{ flexGrow: "2" }}>
                       <span>@{itemAtual.name}</span>
                       <p>{itemAtual.text}</p>
                     </div>
@@ -309,11 +320,17 @@ export default function Home(props) {
               })}
             </ul>
           </PostBox>
-
         </div>
 
-        <div className="profileRelationsArea" style={{ gridArea: 'profileRelationsArea' }}>
-
+        <div
+          className="profileRelationsArea"
+          style={{ gridArea: "profileRelationsArea" }}
+        >
+          <ProfileRelationsBox
+            title="Seguidores"
+            items={seguidores}
+            total={numerosSegui.followers}
+          />
           <ProfileRelationsBoxWrapper>
             <h2 className="smallTitle">Comunidades ({comunidades.length})</h2>
 
@@ -321,7 +338,12 @@ export default function Home(props) {
               {comunidades.slice(0, 6).map((itemAtual) => {
                 return (
                   <li key={itemAtual.id}>
-                    <a href={itemAtual.paginaUrl} target="_blank" rel="noopener noreferrer" title="Site da comunidade">
+                    <a
+                      href={itemAtual.paginaUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="Site da comunidade"
+                    >
                       <img src={itemAtual.imageUrl} alt="Capa da comunidade" />
                       <span>{itemAtual.title}</span>
                     </a>
@@ -331,21 +353,21 @@ export default function Home(props) {
             </ul>
             <hr />
             <p>
-              <a className="boxLink" href={`/comunidades`} >
+              <a className="boxLink" href={`/comunidades`}>
                 Ver todos
               </a>
             </p>
           </ProfileRelationsBoxWrapper>
 
-          <ProfileRelationsBox title="Seguidores" items={seguidores} total={numerosSegui.followers} />
-
-          <ProfileRelationsBox title="Seguindo" items={seguindo} total={numerosSegui.following} />
-
+          <ProfileRelationsBox
+            title="Seguindo"
+            items={seguindo}
+            total={numerosSegui.following}
+          />
         </div>
-
       </MainGrid>
     </>
-  )
+  );
 }
 
 export async function getServerSideProps(context) {

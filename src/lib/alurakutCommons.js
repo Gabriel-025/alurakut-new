@@ -63,7 +63,7 @@ export function AlurakutMenu({ githubUser }) {
 }
 AlurakutMenu.Wrapper = styled.header`
   width: 100%;
-  background-color: rgba(4, 3, 106, 1);
+  background-color: rgb(48, 139, 197);
   position: fixed;
   z-index: 150;
 
