@@ -4,6 +4,7 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import nookies from 'nookies';
 
+
 const BASE_URL = 'https://alurakut.vercel.app/';
 const v = '1';
 
@@ -264,44 +265,67 @@ export function OrkutNostalgicIconSet(props) {
   return (
     <OrkutNostalgicIconSet.List>
       {[
-        { name: 'Recados', slug: 'recados', icon: 'book' },
-        { name: 'Fotos', slug: 'fotos', icon: 'camera' },
-        { name: 'Videos', slug: 'videos', icon: 'video-camera' },
-        { name: 'Fãs', slug: 'fas', icon: 'star' },
-        { name: 'Mensagens', slug: 'mensagens', icon: 'email' },
-      ].map(({ name, slug, icon }) => (
+        { name: "Recados", slug: "recados", icon: "book", number: `${props.number}`},
+        { name: "Fotos", slug: "fotos", icon: "camera" },
+        { name: "Videos", slug: "videos", icon: "video-camera"  },
+        { name: "Fãs", slug: "fas", icon: "star" , number: `${props.number}`},
+        { name: "Mensagens", slug: "mensagens", icon: "email" },
+      ].map(({ name, slug, icon, number }) => (
         <li key={`orkut__icon_set__${slug}`}>
-          <span style={{ gridArea: 'title' }} className="OrkutNostalgicIconSet__title">
+          <span
+            style={{ gridArea: "title" }}
+            className="OrkutNostalgicIconSet__title"
+          >
             {name}
           </span>
-          <span className="OrkutNostalgicIconSet__number" style={{ gridArea: 'number' }}>
-            <img key={`orkut__icon_set__${slug}_img`} className="OrkutNostalgicIconSet__iconSample" src={`https://alurakut.vercel.app/icons/${icon}.svg`} alt="Ícones" />
-            {props[slug] ? props[slug] : 0}
+          <span
+            className="OrkutNostalgicIconSet__number"
+            style={{ gridArea: "number" }}
+          >
+            <img
+              key={`orkut__icon_set__${slug}_img`}
+              className="OrkutNostalgicIconSet__iconSample"
+              src={`https://alurakut.vercel.app/icons/${icon}.svg`}
+              alt="Ícones"
+            />
+            {number ? number: 0}
           </span>
         </li>
       ))}
       {[
-        { name: 'Confiável', slug: 'confiavel', icon: 'smile' },
-        { name: 'Legal', slug: 'legal', icon: 'cool' },
-        { name: 'Sexy', slug: 'sexy', icon: 'heart' },
+        { name: "Confiável", slug: "confiavel", icon: "smile" },
+        { name: "Legal", slug: "legal", icon: "cool" },
+        { name: "Sexy", slug: "sexy", icon: "heart" },
       ].map(({ name, slug, icon }) => {
         const total = props[slug] ? props[slug] : 2;
         return (
           <li key={`orkut__icon_set__${slug}`}>
-            <span className="OrkutNostalgicIconSet__title">
-              {name}
-            </span>
-            <span className="OrkutNostalgicIconSet__iconComplex" className="OrkutNostalgicIconSet__number" style={{ gridArea: 'number' }}>
+            <span className="OrkutNostalgicIconSet__title">{name}</span>
+            <span
+              className="OrkutNostalgicIconSet__iconComplex"
+              className="OrkutNostalgicIconSet__number"
+              style={{ gridArea: "number" }}
+            >
               {[0, 1, 2].map((_, index) => {
-                const isHeartActive = index <= (total - 1);
-                return <img key={`orkut__icon_set__${slug}_img_${index}`} src={`https://alurakut.vercel.app/icons/${icon}.svg`} style={{ marginRight: '2px', opacity: isHeartActive ? 1 : '0.5' }} alt="Ícones" />
+                const isHeartActive = index <= total - 1;
+                return (
+                  <img
+                    key={`orkut__icon_set__${slug}_img_${index}`}
+                    src={`https://alurakut.vercel.app/icons/${icon}.svg`}
+                    style={{
+                      marginRight: "2px",
+                      opacity: isHeartActive ? 1 : "1",
+                    }}
+                    alt="Ícones"
+                  />
+                );
               })}
             </span>
           </li>
         );
       })}
     </OrkutNostalgicIconSet.List>
-  )
+  );
 }
 OrkutNostalgicIconSet.List = styled.ul`
   margin-top: 32px;

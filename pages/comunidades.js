@@ -54,7 +54,7 @@ export default function menuComunidades(props) {
       })
         .then((resposta) => resposta.json())
         .then((respostaCompleta) => {
-          const comunidadesVindasDoDato = respostaCompleta.data.allCommunities;
+        export  const comunidadesVindasDoDato = respostaCompleta.data.allCommunities;
           // console.log(comunidadesVindasDoDato);
           setComunidades(comunidadesVindasDoDato);
         });

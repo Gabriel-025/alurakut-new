@@ -10,51 +10,31 @@ import PostBox from '../src/components/PostBox';
 
 import { AlurakutMenu, AlurakutProfileSidebarMenuDefault, OrkutNostalgicIconSet } from '../src/lib/alurakutCommons';
 import { ProfileRelationsBoxWrapper } from '../src/components/ProfileRelations';
+import { useState } from 'react';
+import styled from "styled-components"
 
-function ProfileSidebar(props) {
-  // console.log(propriedades);
-  return (
-    <Box as="aside">
-      <img src={`https://github.com/${props.githubUser}.png`} alt="Foto do usuário" style={{ borderRadius: '8px' }} />
-      <hr />
-      <p>
-        <a className="boxLink" href={`https://github.com/${props.githubUser}`} title="Nome do usuário" target="_blank" rel="noopener noreferrer" >
-          @{props.githubUser}
-        </a>
-      </p>
-      <hr />
-      <AlurakutProfileSidebarMenuDefault />
-    </Box>
-  )
-}
+const Loading = styled.div`
+  border: 8px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #f4f4f4;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+`;
+const CenterLoading = styled.div`
+  padding:20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 140px;
+`;
 
-function ProfileRelationsBox(props) {
-
-  return (
-    <ProfileRelationsBoxWrapper>
-      <h2 className="smallTitle">{props.title} ({props.total})</h2>
-
-      <ul>
-        {props.items.slice(0, 6).map((itemAtual) => {
-          return (
-            <li key={itemAtual.id}>
-              <a href={itemAtual.html_url} target="_blank" rel="noopener noreferrer" title="Site do usuário">
-                <img src={itemAtual.avatar_url} alt="Avatar do usuário" />
-                <span>{itemAtual.login}</span>
-              </a>
-            </li>
-          );
-        })}
-      </ul>
-      <hr />
-      <p>
-        <a className="boxLink" href={`/amigos`} >
-          Ver todos
-        </a>
-      </p>
-    </ProfileRelationsBoxWrapper>
-  )
-}
 
 export default function Home(props) {
   // USUÁRIO GITHUB
@@ -76,43 +56,105 @@ export default function Home(props) {
   // POST
   const [posts, setPosts] = React.useState([]);
   // NOME POST
-  const [nameValue, setNameValue] = React.useState('');
+  const [nameValue, setNameValue] = React.useState("");
   // TEXTO POST
-  const [textValue, setTextValue] = React.useState('');
+  const [textValue, setTextValue] = React.useState("");
+
+  const [loading, setLoading] = useState(false);
+  const [loadingC, setLoadingC] = useState(false);
+  function ProfileSidebar(props) {
+    // console.log(propriedades); 
+    return (
+      <Box as="aside">
+        <img
+          src={`https://github.com/${props.githubUser}.png`}
+          alt="Foto do usuário"
+          style={{ borderRadius: "8px" }}
+        />
+        <hr />
+        <p>
+          <a
+            className="boxLink"
+            href={`https://github.com/${props.githubUser}`}
+            title="Nome do usuário"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            @{props.githubUser}
+          </a>
+        </p>
+        <hr />
+        <AlurakutProfileSidebarMenuDefault /> 
+      </Box>
+    );
+  }
+  function ProfileRelationsBox(props) {
+    return (
+      <ProfileRelationsBoxWrapper>
+        <h2 className="smallTitle">
+          {props.title} ({props.total})
+        </h2>
+
+        <ul>
+          {props.items.slice(0, 6).map((itemAtual) => {
+            return (
+              <li key={itemAtual.id}>
+                <a
+                  href={itemAtual.html_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Site do usuário"
+                >
+                  <img src={itemAtual.avatar_url} alt="Avatar do usuário" />
+                  <span>{itemAtual.login}</span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+        <hr />
+        <p>
+          <a className="boxLink" href={`/amigos`}>
+            Ver todos
+          </a>
+        </p>
+      </ProfileRelationsBoxWrapper>
+    );
+  }
 
   React.useEffect(function () {
     const urlNumeros = `https://api.github.com/users/${githubUser}`;
     fetch(urlNumeros)
-      .then(resposta => resposta.json())
-      .then(respostaJson => setNumerosSegui(respostaJson));
+      .then((resposta) => resposta.json())
+      .then((respostaJson) => setNumerosSegui(respostaJson));
 
-    const urlFollowers = `https://api.github.com/users/${githubUser}/followers`
+    const urlFollowers = `https://api.github.com/users/${githubUser}/followers`;
     fetch(urlFollowers)
       .then(function (respostaDoServidor) {
         return respostaDoServidor.json();
       })
       .then(function (respostaCompleta) {
         setSeguidores(respostaCompleta);
-      })
+      });
 
-    const urlFollowing = `https://api.github.com/users/${githubUser}/following`
+    const urlFollowing = `https://api.github.com/users/${githubUser}/following`;
     fetch(urlFollowing)
       .then(function (respostaDoServidor) {
         return respostaDoServidor.json();
       })
       .then(function (respostaCompleta) {
         setSeguindo(respostaCompleta);
-      })
-    // API DATOCMS GraphQL Comunidades 
-      fetch("https://graphql.datocms.com/", {
-        method: "POST",
-        headers: {
-          Authorization: "072a2e1106f04e97b3418da1419fcb",
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          query: `query {
+      });
+    // API DATOCMS GraphQL Comunidades
+    fetch("https://graphql.datocms.com/", {
+      method: "POST",
+      headers: {
+        Authorization: "072a2e1106f04e97b3418da1419fcb",
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        query: `query {
           allCommunities {
             title
             id
@@ -120,39 +162,39 @@ export default function Home(props) {
             creatorSlug
           }
         }`,
-        }),
-      })
-        .then((resposta) => resposta.json())
-        .then((respostaCompleta) => {
-          const comunidadesVindasDoDato = respostaCompleta.data.allCommunities;
-          // console.log(comunidadesVindasDoDato);
-          setComunidades(comunidadesVindasDoDato);
-        });
-      // API DATOCMS GraphQL Post
-      fetch("https://graphql.datocms.com/", {
-        method: "POST",
-        headers: {
-          Authorization: "072a2e1106f04e97b3418da1419fcb",
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          query: `query {
+      }),
+    })
+      .then((resposta) => resposta.json())
+      .then((respostaCompleta) => {
+        const comunidadesVindasDoDato = respostaCompleta.data.allCommunities;
+        // console.log(comunidadesVindasDoDato);
+        setComunidades(comunidadesVindasDoDato);
+      });
+    // API DATOCMS GraphQL Post
+    fetch("https://graphql.datocms.com/", {
+      method: "POST",
+      headers: {
+        Authorization: "072a2e1106f04e97b3418da1419fcb",
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        query: `query {
           allPosts {
             id
             name
             text
           }
         }`,
-        }),
-      })
-        .then((resposta) => resposta.json())
-        .then((respostaCompletaPost) => {
-          const postVindosDoDato = respostaCompletaPost.data.allPosts;
-          // console.log(postVindosDoDato);
-          setPosts(postVindosDoDato);
-        });
-  }, [])
+      }),
+    })
+      .then((resposta) => resposta.json())
+      .then((respostaCompletaPost) => {
+        const postVindosDoDato = respostaCompletaPost.data.allPosts;
+        // console.log(postVindosDoDato);
+        setPosts(postVindosDoDato);
+      });
+  }, []);
 
   return (
     <>
@@ -166,7 +208,7 @@ export default function Home(props) {
         <div className="welcomeArea" style={{ gridArea: "welcomeArea" }}>
           <Box>
             <h1 className="title">Bem vindo(a), {githubUser}!</h1>
-            <OrkutNostalgicIconSet />
+            <OrkutNostalgicIconSet number={posts.length} />
           </Box>
 
           <Box>
@@ -175,7 +217,7 @@ export default function Home(props) {
               onSubmit={function handleCriaComunidade(e) {
                 e.preventDefault();
                 const dadosDoForm = new FormData(e.target);
-
+                setLoadingC(true);
                 const comunidade = {
                   title: dadosDoForm.get("title"),
                   imageUrl: dadosDoForm.get("image"),
@@ -193,38 +235,46 @@ export default function Home(props) {
                   const comunidade = dados.registroCriado;
                   const comunidadesAtualizadas = [...comunidades, comunidade];
                   setComunidades(comunidadesAtualizadas);
-                  console.log(comunidadesTitle);
+                  setLoadingC(null);
                   setComunidadesTitle("");
                   setComunidadesImage("");
                   setComunidadesUrl("");
                 });
               }}
             >
-              <div>
-                <CustomizedInput
-                  placeholder="Qual vai ser o nome da sua comunidade?"
-                  name="title"
-                  aria-label="Qual vai ser o nome da sua comunidade?"
-                  value={comunidadesTitle}
-                  onValueChange={setComunidadesTitle}
-                />
-              </div>
-              <div style={{ display: "flex" }}>
-                <CustomizedInput
-                  placeholder="Coloque a URL da imagem da capa"
-                  name="image"
-                  aria-label="Coloque a URL da imagem da capa"
-                  value={comunidadesImage}
-                  onValueChange={setComunidadesImage}
-                />
-              </div>
-              <button
-                type="submit"
-                aria-label="Criar comunidade"
-                style={{ background: "#2E7BB4" }}
-              >
-                Criar comunidade
-              </button>
+              {loadingC ? (
+                <CenterLoading>
+                  <Loading />
+                </CenterLoading>
+              ) : (
+                <>
+                  <div>
+                    <CustomizedInput
+                      placeholder="Qual vai ser o nome da sua comunidade?"
+                      name="title"
+                      aria-label="Qual vai ser o nome da sua comunidade?"
+                      value={comunidadesTitle}
+                      onValueChange={setComunidadesTitle}
+                    />
+                  </div>
+                  <div style={{ display: "flex" }}>
+                    <CustomizedInput
+                      placeholder="Coloque a URL da imagem da capa"
+                      name="image"
+                      aria-label="Coloque a URL da imagem da capa"
+                      value={comunidadesImage}
+                      onValueChange={setComunidadesImage}
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    aria-label="Criar comunidade"
+                    style={{ background: "#2E7BB4" }}
+                  >
+                    Criar comunidade
+                  </button>
+                </>
+              )}
             </form>
           </Box>
 
@@ -234,7 +284,7 @@ export default function Home(props) {
               onSubmit={function handleCriaPost(e) {
                 e.preventDefault();
                 const dadosDoForm = new FormData(e.target);
-
+                setLoading(true);
                 const post = {
                   name: dadosDoForm.get("name"),
                   text: dadosDoForm.get("text"),
@@ -249,47 +299,49 @@ export default function Home(props) {
                   const dadosPost = await response.json();
                   // console.log(dados.registroCriado);
                   const post = dadosPost.registroCriado;
+
                   const postAtualizados = [post, ...posts];
                   setPosts(postAtualizados);
+                  setLoading(false);
                   setNameValue("");
                   setTextValue("");
                 });
               }}
             >
-              <div>
-                <CustomizedInput
-                  placeholder="Usuário Github"
-                  name="name"
-                  aria-label="Usuário Github"
-                  value={nameValue}
-                  onValueChange={setNameValue}
-                />
-              </div>
-              <div>
-                <CustomizedInput
-                  placeholder="Deixei seu comentario"
-                  name="text"
-                  aria-label="Deixei seu comentario"
-                  value={textValue}
-                  onValueChange={setTextValue}
-                />
-              </div>
-              {/* <input
-                  placeholder="Usuário Github"
-                  name="name"
-                  aria-label="Usuário Github"
-                  value={nameValue}
-                  type="text"
-                  onChange={e => setNameValue(e.target.value)}
-                  required
-                /> */}
-              <button
-                type="submit"
-                aria-label="Criar comentario"
-                style={{ background: "#2E7BB4" }}
-              >
-                Criar comentario
-              </button>
+              {loading ? (
+                <CenterLoading>
+                  <Loading />
+                </CenterLoading>
+              ) : (
+                <>
+                  <div>
+                    <CustomizedInput
+                      style={{ display: "none" }}
+                      placeholder="Usuário Github"
+                      name="name"
+                      aria-label="Usuário Github"
+                      value={nameValue}
+                      onValueChange={setNameValue}
+                    />
+                  </div>
+                  <div>
+                    <CustomizedInput
+                      placeholder="Deixei seu comentario"
+                      name="text"
+                      aria-label="Deixei seu comentario"
+                      value={textValue}
+                      onValueChange={setTextValue}
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    aria-label="Criar comentario"
+                    style={{ background: "#2E7BB4" }}
+                  >
+                    Criar comentario
+                  </button>
+                </>
+              )}
             </form>
           </Box>
 
