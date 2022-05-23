@@ -233,12 +233,11 @@ export default function Home(props) {
                   const dados = await response.json();
                   // console.log(dados.registroCriado);
                   const comunidade = dados.registroCriado;
-                  const comunidadesAtualizadas = [...comunidades, comunidade];
+                  const comunidadesAtualizadas = [comunidade, ...comunidades];
                   setComunidades(comunidadesAtualizadas);
                   setLoadingC(null);
                   setComunidadesTitle("");
                   setComunidadesImage("");
-                  setComunidadesUrl("");
                 });
               }}
             >
